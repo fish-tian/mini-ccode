@@ -8,3 +8,4 @@ coverage/
 .claude/
 .local-docs/
 AGENTS.md
+temp/
