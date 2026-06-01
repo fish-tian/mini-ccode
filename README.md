@@ -25,6 +25,10 @@ bun run mini-ccode -- --resume <session-id> "continue the saved work"
 
 The public teaching chapters are in `docs/`. Start from `docs/README.md` for the full reading order.
 
+## Examples
+
+- `examples/minivote`: a small full-stack voting app generated as a mini-ccode practice task.
+
 Start with:
 
 - `docs/01-project-skeleton.md`
