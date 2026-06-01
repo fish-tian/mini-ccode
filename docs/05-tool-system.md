@@ -1,4 +1,12 @@
-# Tool System 教学文档
+# 第 05 章：Tool System（工具系统）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- 工具定义、输入校验和执行结果为什么要结构化。
+- 模型工具调用如何映射到本地函数。
+- 为什么工具系统必须先于文件工具和命令工具完成。
 
 ## 这个模块解决什么问题
 
@@ -54,7 +62,7 @@ validateInput   执行前检查参数
 executeToolCall 执行并返回结构化结果
 ```
 
-本项目当前实现就是这个最小闭环：
+本章先讲最小闭环：
 
 ```text
 ToolCall
@@ -76,7 +84,7 @@ ToolCall
 }
 ```
 
-现在 Agent Loop 已经会把这些结果写回 transcript，让模型修正下一步。
+现在 Agent Loop 已经会把这些结果写回 transcript，让模型修正下一步。后续章节会把同一条执行链扩展到文件工具、本地命令、Todo 和 Sub-Agent；这些都不是绕过 Tool System 的特殊通道。
 
 ## 本项目中的实现
 
@@ -135,24 +143,25 @@ isConcurrencySafe 默认 false
 
 | 维度 | ccb 做法 | mini-ccode 当前实现 | 为什么先这样 |
 |---|---|---|---|
-| 用户可见能力 | 模型可以真实读写文件、跑命令、搜索、开子 Agent | Agent Loop 已能执行 echo/fake 工具并继续下一轮 | Permission、File Tools、Bash 还没完成，不能提前开放危险能力 |
+| 用户可见能力 | 模型可以真实读写文件、跑命令、搜索、开子 Agent | 后续章节已把文件工具、本地命令、Todo 和 Sub-Agent 接到同一工具链 | 本章只解释工具系统边界，不把所有工具细节塞进第一步 |
 | 工具对象 | 工具包含执行、权限、UI、上下文摘要、并发、安全标记、MCP 信息 | 工具只包含 schema、execute、只读/并发标记 | 先讲清楚“工具是什么”，再逐层加能力 |
 | schema | Zod 和 JSON Schema 并存 | 手写轻量 JSON Schema 子集 | 当前参数简单，不为第一步引入新依赖 |
-| 执行流程 | schema -> validateInput -> hooks -> permission -> call -> result mapping -> hooks | schema -> execute -> result | 当前只实现最核心的确定性执行壳 |
+| 执行流程 | schema -> validateInput -> hooks -> permission -> call -> result mapping -> hooks | validate -> permission -> execute -> result | 先保留确定性执行壳，hooks 和并发后续再加 |
 | 并发 | StreamingToolExecutor 可在模型还在输出时提前执行工具 | 单个工具调用串行执行 | 先保证测试和 transcript 稳定 |
 | UI | React/Ink 渲染工具调用、进度和 diff | 无工具 UI | CLI / REPL 后续只消费工具事件 |
 
 这不是逃避细节，而是拆层。ccb 的完整工具系统很强，但教学项目不能第一步就把所有能力塞进去。
 
-当前我们已经有了工具边界和最小 Agent Loop 接线。后续会这样接近 ccb：
+工具系统在全书中的演进路线是：
 
 ```text
 Tool System
   -> Agent Loop fake tool integration  已完成
-  -> Permission
-  -> File Tools
-  -> Bash
-  -> Context / tool result compaction
+  -> Permission                         已完成
+  -> File Tools                         已完成
+  -> Bash / PowerShell                  已完成
+  -> Todo / Sub-Agent                   已完成
+  -> Context / tool result compaction   已完成
   -> streaming tool execution
 ```
 
@@ -213,8 +222,7 @@ model_response(tool_call)
 
 再往后：
 
-- Permission：在 `executeToolCall()` 前加允许/拒绝/询问。
-- File Tools：实现 read/write/edit，但必须受路径边界约束。
-- Bash：实现命令执行，但必须默认需要确认。
-- Context：大工具结果不能无限追加到 history。
+- 更细的权限规则：路径级、命令级、插件级规则。
+- 更丰富的工具 UI：进度、diff、分组和折叠。
+- 更完整的工具结果管理：附件、缓存和可恢复 transcript。
 - Streaming executor：等基础 transcript 稳定后，再考虑并发和提前执行。

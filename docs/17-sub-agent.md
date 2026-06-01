@@ -1,4 +1,12 @@
-# Sub-Agent 教学文档
+# 第 17 章：Sub-Agent（子 Agent）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- 父 Agent 如何通过 `agent` 工具创建子 Agent。
+- `general` 和 `explore` 两类子 Agent 的权限边界。
+- 子 Agent 为什么需要独立上下文和独立 Todo 分区。
 
 ## 这个模块解决什么问题
 

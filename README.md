@@ -23,7 +23,7 @@ bun run mini-ccode -- --resume <session-id> "continue the saved work"
 
 ## Documentation
 
-The public teaching chapters are in `docs/`.
+The public teaching chapters are in `docs/`. Start from `docs/README.md` for the full reading order.
 
 Start with:
 

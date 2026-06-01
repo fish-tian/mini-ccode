@@ -1,4 +1,12 @@
-# LLM Provider 教学文档
+# 第 02 章：LLM Provider（模型供应商层）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- 为什么不能让 Agent 直接依赖某个厂商 SDK。
+- mini-ccode 如何把模型输出整理成稳定的流式事件。
+- mock provider 和真实 provider 在测试中的分工。
 
 ## 这个模块解决什么问题
 
@@ -82,7 +90,7 @@ ModelMessage[]
 | 消息结构 | 支持更复杂的消息、工具结果、元数据和上下文形态 | 只支持 `system/user/assistant` 文本消息 |
 | Streaming | 面向完整 agent loop 和 UI 的生产事件流 | 面向教学和测试的 `response_start/text_delta/response_stop/error` |
 | 工具调用 | 会和工具 schema、tool use、tool result 协作 | 本模块完全不解析工具调用 |
-| 测试策略 | 需要覆盖真实生产边界和多层状态 | 默认测试只用 mock；真实 API 走显式 smoke |
+| 测试策略 | 需要覆盖真实生产边界和多层状态 | 默认测试只用 mock；真实 API 走显式冒烟测试（smoke test） |
 
 这个差异是刻意的。LLM Provider 第一版要让读者先看懂一件事：模型层只是输入输出边界，不是 agent 本身。等 Tool System 和 Context 设计完成后，再扩展消息块、tool call delta、provider registry 或 direct Anthropic provider。
 
@@ -131,9 +139,9 @@ ModelMessage[]
 - 增加更完整的 model mapping。
 - 在 Agent Loop 模块里用 `MockModelProvider` 做 golden transcript 测试。
 
-## 手动 Smoke 测试
+## 手动冒烟测试（smoke test）
 
-真实 provider 连通性通过 `bun run smoke:llm` 手动验证。这个脚本不纳入默认 `bun run test`，避免单元测试误访问真实 API、产生费用或受网络状态影响。
+真实 provider 连通性通过 `bun run smoke:llm` 手动验证。冒烟测试（smoke test）只确认“真实链路能不能跑通”，不追求覆盖所有边界。这个脚本不纳入默认 `bun run test`，避免单元测试误访问真实 API、产生费用或受网络状态影响。
 
 OpenAI 官方 API 示例：
 
@@ -152,7 +160,7 @@ $env:MINI_CCODE_MODEL="anthropic/claude-3.5-sonnet"
 bun run smoke:llm
 ```
 
-也可以设置 `MINI_CCODE_SMOKE_PROMPT` 覆盖默认 smoke prompt。
+也可以设置 `MINI_CCODE_SMOKE_PROMPT` 覆盖默认冒烟测试提示词（smoke prompt）。
 
 ## 真实集成测试
 

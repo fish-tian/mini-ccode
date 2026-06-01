@@ -1,4 +1,12 @@
-# Todo 任务清单教学文档
+# 第 15 章：Todo（任务清单）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- Todo 为什么是 Agent 的进度状态，而不是用户界面装饰。
+- 模型如何通过工具调用维护任务清单。
+- 父 Agent 和子 Agent 为什么需要不同的 Todo 分区。
 
 ## 1. 它解决什么问题
 
@@ -92,13 +100,13 @@ CLI 会显示：
 | 层 | ccb 做法 | mini-ccode 当前 |
 |---|---|---|
 | 工具 | `TodoWrite` | `TodoWrite` |
-| 状态 | `AppState.todos[agentId]` | 当前 Agent 的单会话 `TodoState` |
+| 状态 | `AppState.todos[agentId]` | `TodoState` 按 owner 分区：`main` 和 `subagent:<slug>` |
 | 展示 | React/Ink UI 或任务列表视图 | CLI 文本 `[todo]` |
-| 恢复 | 从 transcript 扫描最后一次 TodoWrite | 从 Session 消息扫描最后一次 TodoWrite |
+| 恢复 | 从 transcript 扫描最后一次 TodoWrite | 当前只从父 Agent Session 消息恢复 `main` |
 | 提醒 | 有附件提醒模型更新 Todo | 暂不实现 |
 | 后台任务 | 另有更重的 Task 系统 | 暂不实现 |
 
-mini-ccode 先实现最短可见路径：模型能调用，用户能看到，Session 能恢复。后续如果加入 Sub-Agent，再扩展为按 agentId 分区的 Todo 状态。
+mini-ccode 先实现最短可见路径：模型能调用，用户能看到，父 Agent Session 能恢复。Sub-Agent 加入后，Todo 已经按 owner 分区，避免子 Agent 的 `TodoWrite` 覆盖父 Agent 的计划；子 Agent 自己的历史和 Todo 第一版仍不持久化。
 
 ## 8. 什么时候应该用 Todo
 

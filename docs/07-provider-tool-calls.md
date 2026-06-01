@@ -1,4 +1,12 @@
-# Provider Tool Calls 教学文档
+# 第 07 章：Provider Tool Calls（模型工具调用协议）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- 模型工具调用和用户手动命令的区别。
+- provider 如何把工具调用流式传给 Agent。
+- Agent Loop 如何把工具结果再交回模型。
 
 ## 这个模块解决什么问题
 

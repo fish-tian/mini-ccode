@@ -1,4 +1,12 @@
-# File Tools 教学文档
+# 第 08 章：File Tools（文件工具）
+
+## 本章目标
+
+读完本章，你应该能理解：
+
+- 编程 Agent 为什么必须能读取、搜索和修改真实文件。
+- 文件工具如何通过工作区边界防止越界访问。
+- 文件副作用如何经过 Tool System 和 Permission。
 
 ## 这个模块解决什么问题
 
@@ -118,10 +126,11 @@ Permission -> 拒绝 write_file / edit_file -> 磁盘不变
 
 CLI 默认 Agent 已经注册真实 File Tools。也就是说，真实模型协议、文件工具、Agent Loop 和 CLI 用户路径已经连通。用户在 `bun run mini-ccode` 中提出文件相关请求时，模型可以看到 `read_file`、`glob`、`grep` 等工具，并通过工具调用让 Agent 执行它们。
 
-CLI 权限模式入口完成后，默认会话使用只读策略：读取和搜索可以执行，写入和编辑会被拒绝。用户要让模型修改文件，必须显式启动全部允许模式：
+CLI 权限入口完成后，默认会话使用 `default` 模式：读取和搜索可以直接执行，写入和编辑会先询问用户。用户也可以显式选择更保守或更宽松的模式：
 
 ```text
-bun run mini-ccode -- --permission-mode allow-all "修改指定文件"
+bun run mini-ccode -- --permission-mode read-only "只检查，不修改"
+bun run mini-ccode -- --permission-mode allow-all "允许模型直接修改指定文件"
 ```
 
 需要注意当前工具循环上限：CLI 没有额外配置 `maxTurns`，所以使用 Agent 默认值 `maxTurns = 50`。这个值不是能力承诺，而是防止无限循环的轮次预算：它允许较完整的多步文件任务继续推进，同时给失控工具循环留出明确边界。
@@ -144,7 +153,7 @@ bun run mini-ccode -- --permission-mode allow-all "修改指定文件"
 | Write | 有读前写、修改时间保护、历史记录 | 直接完整写入工作区内文件 |
 | Edit | 支持更复杂的替换、格式处理和补丁展示 | 只做唯一 `old_string` 替换 |
 | Search | 通常依赖更强搜索能力和忽略规则 | Node 标准库递归遍历 |
-| Permission | 有交互式权限确认 | CLI 可选择只读/全部允许模式，暂无逐次审批 UI |
+| Permission | 有交互式权限确认 | 默认模式逐次询问；也支持只读和全部允许 |
 | Tool UI | 有丰富渲染和结果管理 | 当前只产生工具结果文本 |
 
 这些简化是有意的：第一版先证明真实文件副作用能安全进入 Agent Loop，而不是一开始复制生产工具的全部复杂度。
