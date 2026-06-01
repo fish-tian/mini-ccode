@@ -51,8 +51,13 @@ The app creates a local SQLite database named `minivote.db`. Database files are 
 
 ```text
 examples/minivote/
+  docs/         generation history and screenshot
   server/       Bun API server and SQLite access
   src/          React frontend
   index.html    Vite entry
   package.json  scripts and dependencies
 ```
+
+## Generation History
+
+The `docs/history.md` file records the mini-ccode interaction that produced this example. Local absolute paths have been replaced with `<workspace>` before publishing.
