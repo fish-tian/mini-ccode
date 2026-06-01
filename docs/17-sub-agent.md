@@ -8,6 +8,26 @@
 - `general` 和 `explore` 两类子 Agent 的权限边界。
 - 子 Agent 为什么需要独立上下文和独立 Todo 分区。
 
+## Sub-Agent 调用图
+
+父 Agent 不直接创建后台线程。它像调用其他工具一样调用 `agent` 工具；工具内部再创建一个新的 Agent，并把最终报告作为工具结果交回父 Agent。
+
+```mermaid
+sequenceDiagram
+  participant P as Parent Agent
+  participant Tool as agent tool
+  participant C as Child Agent
+  participant TS as Child tools
+
+  P->>Tool: agent({ subagent_type, prompt })
+  Tool->>C: new Agent(child system prompt)
+  C->>TS: read/search/edit/run according to type
+  TS-->>C: tool results
+  C-->>Tool: final report
+  Tool-->>P: tool result
+  P->>P: synthesize result for user
+```
+
 ## 这个模块解决什么问题
 
 Sub-Agent 是“父 Agent 通过工具创建子 Agent”的能力。父 Agent 不把所有搜索、尝试和中间推理都塞进自己的历史，而是把一个完整子任务交给另一个独立上下文执行。子 Agent 完成后，只把总结作为 `agent` 工具结果返回给父 Agent。

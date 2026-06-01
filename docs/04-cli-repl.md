@@ -8,6 +8,24 @@
 - 用户输入如何进入 Agent Loop。
 - 为什么 CLI 不应该绕过 Agent 直接调用模型或工具。
 
+## CLI / REPL 流程图
+
+CLI 的职责是把终端输入变成 Agent 输入，并把 Agent 事件渲染回终端。它不自己解释模型意图。
+
+```mermaid
+flowchart TD
+  A["process.argv"] --> B{"one-shot?"}
+  B -->|yes| C["Agent.runStream(prompt)"]
+  B -->|no| R["REPL loop"]
+  R --> I["read line"]
+  I --> K{"slash command?"}
+  K -->|yes| S["/help /reset /save /sessions /compact"]
+  K -->|no| C
+  C --> E["AgentEvent stream"]
+  E --> O["render to stdout/stderr"]
+  O --> R
+```
+
 ## 这个模块解决什么问题
 
 有了 `Agent.runStream()`，项目已经能“在代码里”跑一轮 agent。但这还不是一个能用的工具。

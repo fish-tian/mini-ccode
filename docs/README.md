@@ -10,6 +10,28 @@
 
 这里的 ccb 是一个更完整的编程 Agent 实现，用来作为公开对比对象。mini-ccode 不追求一步到位复制完整产品，而是把能力拆成可以观察、可以测试、可以解释的教学步骤。
 
+## 总体架构
+
+mini-ccode 的主线可以先看成四层：用户入口、Agent 循环、工具执行、状态管理。模型不直接读写文件，也不直接运行命令；它只能发出结构化工具调用，再由 Tool System 和 Permission 统一处理。
+
+```mermaid
+flowchart TD
+  U["User\nCLI / REPL"] --> C["CLI Runtime\n参数、输入、渲染"]
+  C --> A["Agent Loop\n历史、事件流、轮次控制"]
+  A --> P["LLM Provider\nOpenAI-compatible / Mock"]
+  P --> A
+  A --> T["Tool System\n注册、校验、执行结果"]
+  T --> G["Permission\nallow / ask / deny"]
+  G --> F["File Tools\nread / write / edit / glob / grep"]
+  G --> B["Command Tool\npowershell / bash"]
+  G --> D["TodoWrite\n任务状态"]
+  G --> S["Sub-Agent Tool\ngeneral / explore"]
+  A --> X["Context Manager\n估算、局部压缩、摘要压缩"]
+  C --> R["Session Store\n/save / /sessions / --resume"]
+```
+
+这张图也是后续章节的阅读地图：第 02-04 章解释模型和 Agent 主循环，第 05-12 章解释工具与权限，第 13-17 章解释上下文、提示词、Todo 和 Sub-Agent。
+
 ## 推荐阅读顺序
 
 | 章节 | 主题 | 读完后应该理解 |

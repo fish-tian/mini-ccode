@@ -8,6 +8,25 @@
 - 文件工具如何通过工作区边界防止越界访问。
 - 文件副作用如何经过 Tool System 和 Permission。
 
+## 文件工具边界图
+
+文件工具的第一条边界是工作区根目录。所有路径都要先解析成真实路径，再确认没有越过 `workspaceRoot`。
+
+```mermaid
+flowchart TD
+  A["tool input path"] --> B["resolve against workspaceRoot"]
+  B --> C["realpath / parent fallback"]
+  C --> D{"inside workspace?"}
+  D -->|no| E["reject\npath outside workspace"]
+  D -->|yes| F{"tool"}
+  F --> R["read_file"]
+  F --> W["write_file"]
+  F --> X["edit_file"]
+  F --> G["glob / grep"]
+  W --> P["Permission ask / allow / deny"]
+  X --> P
+```
+
 ## 这个模块解决什么问题
 
 File Tools 让 Agent 第一次能观察和修改真实工作区文件。

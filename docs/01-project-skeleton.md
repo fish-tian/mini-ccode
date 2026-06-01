@@ -8,6 +8,20 @@
 - 最小骨架应该包含哪些脚本、测试和文档入口。
 - 为什么 mini-ccode 从单包 TypeScript 项目开始，而不是直接采用复杂工程结构。
 
+## 项目骨架图
+
+第一章不实现 Agent 行为，只建立后续模块能持续生长的工程外壳：
+
+```mermaid
+flowchart TD
+  R["README.md\n公开入口"] --> D["docs/\n教学章节"]
+  P["package.json\n脚本入口"] --> Q["质量门\ntypecheck / lint / test"]
+  S["src/\n最小 typed API"] --> T["tests/\nscaffold test"]
+  Q --> T
+  D --> M["后续模块\nProvider / Agent / Tools / Context"]
+  S --> M
+```
+
 ## 这个模块解决什么问题
 
 Project Skeleton 解决的是“项目怎么开始”的问题。

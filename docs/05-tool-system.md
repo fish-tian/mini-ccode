@@ -8,6 +8,25 @@
 - 模型工具调用如何映射到本地函数。
 - 为什么工具系统必须先于文件工具和命令工具完成。
 
+## 工具执行管线图
+
+工具系统把模型请求变成一条固定管线。后续所有真实副作用都必须经过这条管线。
+
+```mermaid
+flowchart TD
+  A["ModelToolCall\nname + input"] --> B["ToolRegistry.get(name)"]
+  B -->|unknown| U["unknown_tool"]
+  B --> C["validateToolInput(schema, input)"]
+  C -->|invalid| I["invalid_input"]
+  C --> D["PermissionPolicy.decide"]
+  D -->|deny| P["permission_denied"]
+  D -->|ask| Q["requestPermission"]
+  Q -->|denied| P
+  Q -->|allowed| E["tool.execute"]
+  D -->|allow| E
+  E --> R["ToolExecutionResult"]
+```
+
 ## 这个模块解决什么问题
 
 LLM 本身不会读文件，也不会跑命令。它只能生成文本。

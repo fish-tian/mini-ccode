@@ -8,6 +8,24 @@
 - 局部压缩和摘要压缩分别解决什么问题。
 - mini-ccode 当前 Context 机制与 ccb 的差距。
 
+## 上下文整理流程图
+
+Context Manager 会先估算当前消息大小；如果超过预算，先做局部压缩，再在仍然超限时调用模型生成摘要。
+
+```mermaid
+flowchart TD
+  A["messages before model request"] --> B["estimate tokens/chars"]
+  B --> C{"within limit?"}
+  C -->|yes| Z["send as-is"]
+  C -->|no| D["split into message segments"]
+  D --> E["MicroCompact\nold long tool results"]
+  E --> F{"within limit?"}
+  F -->|yes| Z
+  F -->|no| G["summarize old segments"]
+  G --> H["summary + recent messages"]
+  H --> Z
+```
+
 ## 1. 这个模块交付了什么
 
 mini-ccode 现在有了一个可观察的上下文整理路径：

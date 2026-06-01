@@ -8,6 +8,20 @@
 - 模型如何通过工具调用维护任务清单。
 - 父 Agent 和子 Agent 为什么需要不同的 Todo 分区。
 
+## Todo 状态流图
+
+TodoWrite 是一个工具调用。模型不能直接改 UI 状态，只能通过工具系统提交完整任务列表。
+
+```mermaid
+flowchart TD
+  M["Model emits TodoWrite"] --> T["Tool System validates input"]
+  T --> P["Permission allows read-only state update"]
+  P --> S["TodoState.set(owner, todos)"]
+  S --> E["todo_updated event"]
+  E --> C["CLI renders [todo]"]
+  S --> R["Session restore scans last TodoWrite\nmain owner only"]
+```
+
 ## 1. 它解决什么问题
 
 Todo 任务清单是当前会话里的短期进度表。它让模型在处理复杂任务时，把“要做什么、正在做什么、做完了什么”写成结构化状态，并让 CLI 直接显示给用户。

@@ -8,6 +8,23 @@
 - 消息历史和事件流分别解决什么问题。
 - 后续工具系统如何接入这个循环。
 
+## Agent 循环图
+
+Agent Loop 的核心不是“调用一次模型”，而是不断把观察结果写回历史，再决定是否继续下一轮。
+
+```mermaid
+flowchart TD
+  U["User input"] --> H["Append user message"]
+  H --> C["Build context\nsystem + project + history"]
+  C --> M["Provider stream"]
+  M --> R{"Model output"}
+  R -->|text| A["Append assistant message"]
+  R -->|tool calls| T["Execute tools"]
+  T --> O["Append tool results"]
+  O --> C
+  A --> E["turn_end"]
+```
+
 ## 这个模块解决什么问题
 
 LLM Provider 只会做一件事：给它一组消息，它返回模型输出。

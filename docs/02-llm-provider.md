@@ -8,6 +8,21 @@
 - mini-ccode 如何把模型输出整理成稳定的流式事件。
 - mock provider 和真实 provider 在测试中的分工。
 
+## 模型层边界图
+
+Provider 的职责是“把统一消息格式送给模型，再把模型输出变成统一事件”。它不执行工具、不管理权限、不保存会话。
+
+```mermaid
+flowchart LR
+  A["Agent"] --> M["ModelMessage[]"]
+  M --> P["LanguageModelProvider"]
+  P --> O["OpenAI-compatible HTTP/SSE"]
+  P --> K["MockModelProvider\n测试固定输出"]
+  O --> E["ModelStreamEvent\nresponse_start / text_delta / tool_calls / error"]
+  K --> E
+  E --> A
+```
+
 ## 这个模块解决什么问题
 
 LLM Provider 是 agent 和模型服务之间的边界。

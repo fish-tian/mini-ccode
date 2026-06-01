@@ -8,6 +8,22 @@
 - 前缀匹配为什么必须有空白边界。
 - 这个模块为什么不是完整的 shell 语法安全分析。
 
+## 命令前缀审批图
+
+命令前缀审批不会证明命令安全，它只把用户刚刚确认过的一类命令在当前进程内临时放行。
+
+```mermaid
+flowchart TD
+  A["command request"] --> B{"known allowed prefix?"}
+  B -->|yes| X["execute"]
+  B -->|no| C["show full command + suggested prefix"]
+  C --> D{"user choice"}
+  D -->|y once| X
+  D -->|p prefix| P["store prefix in current process"]
+  P --> X
+  D -->|n reject| R["permission_denied"]
+```
+
 ## 1. 这个模块改变了什么
 
 mini-ccode 的默认模式以前会在每条本地命令执行前询问用户。现在仍然会询问未知命令，但用户可以把一个更窄的命令前缀临时放行。

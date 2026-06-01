@@ -8,6 +8,23 @@
 - `/save`、`/sessions` 和 `--resume` 的数据流。
 - 为什么恢复会话不等于恢复旧权限。
 
+## Session 边界图
+
+Session 保存的是对话快照，不是工作区快照，也不是权限授权。
+
+```mermaid
+flowchart TD
+  A["Agent messages"] --> S["/save"]
+  S --> J["session JSON\n~/.mini-ccode/projects/..."]
+  J --> L["--resume <id>"]
+  L --> H["initialMessages"]
+  H --> N["new Agent"]
+  N --> M["continue conversation"]
+  P["Permission mode"] --> N
+  W["workspace files"] -. "not saved" .- J
+  P -. "not restored from session" .- J
+```
+
 ## 解决的问题
 
 在 Session 模块之前，mini-ccode 已能在一个 REPL 进程中连续对话：

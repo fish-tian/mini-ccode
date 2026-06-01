@@ -8,6 +8,20 @@
 - 项目规则上下文为什么不应该混入普通对话历史。
 - 为什么提示词必须和真实可用能力保持一致。
 
+## 提示词组装图
+
+一次模型请求由多层内容组成。系统提示词是最高层规则；项目规则是额外上下文；普通历史才是可保存、可恢复的对话内容。
+
+```mermaid
+flowchart TD
+  A["default system prompt"] --> M["model request"]
+  B["--system-prompt / --append-system-prompt"] --> A
+  C["project instructions\ncontextMessages"] --> M
+  D["conversation history"] --> M
+  E["current user input"] --> M
+  M --> P["provider.stream()"]
+```
+
 ## 1. 它解决什么问题
 
 系统提示词（system prompt）是模型每次请求前收到的最高层行为说明。没有它，模型只看到用户输入、历史消息和工具定义，不知道 mini-ccode 期望它按什么工程习惯工作。

@@ -8,6 +8,28 @@
 - provider 如何把工具调用流式传给 Agent。
 - Agent Loop 如何把工具结果再交回模型。
 
+## Provider 工具调用流程图
+
+真实模型不会直接调用本地函数。Provider 需要把本地工具定义转换成模型协议，再把模型返回的 tool call 转回 Agent 能执行的结构。
+
+```mermaid
+sequenceDiagram
+  participant A as Agent
+  participant P as Provider
+  participant M as Model
+  participant T as Tool System
+
+  A->>P: messages + tool definitions
+  P->>M: OpenAI-compatible request
+  M-->>P: streamed tool_calls
+  P-->>A: ModelToolCall[]
+  A->>T: executeToolCall(...)
+  T-->>A: tool result
+  A->>P: messages + assistant tool_calls + tool result
+  P->>M: next request
+  M-->>A: final answer
+```
+
 ## 这个模块解决什么问题
 
 Provider Tool Calls 解决的是“真实模型怎么把工具调用交给 Agent Loop”的问题。
