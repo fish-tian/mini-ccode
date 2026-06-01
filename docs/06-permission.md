@@ -1,4 +1,4 @@
-﻿# Permission 教学文档
+# Permission 教学文档
 
 ## 模块定位
 
@@ -107,7 +107,7 @@ deny 优先，避免配置冲突时误放行。
 
 ## 教学版取舍
 
-| 维度 | 完整产品级做法 | mini-ccode 当前实现 |
+| 维度 | ccb 做法 | mini-ccode 当前实现 |
 |---|---|---|
 | 权限模式 | default、plan、acceptEdits、dontAsk、bypassPermissions、auto | CLI 支持 `read-only` / `allow-all` 两档，内部使用 policy |
 | 规则来源 | session、user、project、local、policy、cliArg | 内存策略 |
@@ -116,7 +116,7 @@ deny 优先，避免配置冲突时误放行。
 | 内容级规则 | Bash 命令、路径、MCP server、hooks、classifier | 内置策略只看工具名和只读标记 |
 | 执行器 | streaming tool executor + hooks + telemetry | `executeToolCall()` 串行执行 |
 
-mini-ccode 当前复刻的是 生产级系统 的边界，不是完整产品级权限系统。
+mini-ccode 当前复刻的是 ccb 的权限边界，不是 ccb 的完整权限系统。
 
 ## 关键代码导读
 

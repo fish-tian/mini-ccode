@@ -1,4 +1,4 @@
-﻿# Sub-Agent 教学文档
+# Sub-Agent 教学文档
 
 ## 这个模块解决什么问题
 
@@ -70,14 +70,14 @@ mini-ccode 第一版内置两类子 Agent：
 
 `explore` 在 `read-only` 模式下可以运行，因为它只拿只读文件工具。这个判断发生在 Permission 策略里，不是绕过权限系统。
 
-子 Agent 的系统提示词借鉴了 生产级系统 的内置 Agent 写法，但按 mini-ccode 当前能力收窄：
+子 Agent 的系统提示词借鉴了 ccb 的内置 Agent 写法，但按 mini-ccode 当前能力收窄：
 
 | 类型 | 借鉴点 | mini-ccode 收窄点 |
 |---|---|---|
 | `general` | 强调代码搜索、多文件分析、复杂问题调查、少创建新文件、最终给简洁报告 | 只使用当前 CLI 已有工具；写文件和命令继续走现有 Permission |
 | `explore` | 明确只读、强调搜索策略、禁止修改文件、要求快速报告发现 | 不允许 Bash 只读命令，只给 `read_file`、`glob`、`grep` |
 
-父 Agent 的默认系统提示词也借鉴了 生产级系统 的 Agent 工具说明：fresh sub-agent 没有看过当前对话，所以 `prompt` 必须包含目标、背景、已知信息和期望报告形态；不能写“根据你的发现修复它”这种模糊指令。
+父 Agent 的默认系统提示词也借鉴了 ccb 的 Agent 工具说明：fresh sub-agent 没有看过当前对话，所以 `prompt` 必须包含目标、背景、已知信息和期望报告形态；不能写“根据你的发现修复它”这种模糊指令。
 
 子 Agent 的工具事件会通过 `sub_agent_event` 转发给父 Agent：
 
@@ -108,7 +108,7 @@ Session 第一版仍只从父 Agent 历史恢复 `main` todo。原因是子 Agen
 
 ## 教学版取舍
 
-| 层次 | 完整产品级做法 | mini-ccode 当前版本 | 原因 |
+| 层次 | ccb 做法 | mini-ccode 当前版本 | 原因 |
 |---|---|---|---|
 | Agent 类型 | 内置、用户、项目、插件等多来源 | 仅 `general` 和 `explore` | 保持教学版边界清楚 |
 | 执行模式 | 同步、后台、remote、worktree、fork | 仅前台同步 | 后台和隔离目录需要独立生命周期设计 |
@@ -143,7 +143,7 @@ Session 第一版仍只从父 Agent 历史恢复 `main` todo。原因是子 Agen
 
 ## 可扩展方向
 
-后续如果要接近 生产级系统，应该分模块增加：
+后续如果要接近 ccb，应该分模块增加：
 
 - 自定义 Agent 定义：用户、项目、插件来源。
 - 后台 Agent：任务注册、通知、继续通信和 transcript 持久化。

@@ -1,4 +1,4 @@
-﻿# Agent Loop 教学文档
+# Agent Loop 教学文档
 
 ## 这个模块解决什么问题
 
@@ -73,7 +73,7 @@ turn_end(provider_error)
 
 ## 教学版取舍
 
-生产级系统 的 Agent Loop 是完整生产形态：模型可以请求工具，工具结果会写回消息历史，循环继续；中间还要处理权限、上下文压缩、abort、恢复、并发工具执行和 UI 渲染。
+ccb 的 Agent Loop 是完整生产形态：模型可以请求工具，工具结果会写回消息历史，循环继续；中间还要处理权限、上下文压缩、abort、恢复、并发工具执行和 UI 渲染。
 
 mini-ccode 当前实现只保留最小骨架：
 
@@ -87,7 +87,7 @@ user input
 
 差异可以分成三层看：
 
-| 层级 | 完整产品级做法 | mini-ccode 当前实现 |
+| 层级 | ccb 做法 | mini-ccode 当前实现 |
 |---|---|---|
 | 表面行为 | 能连续使用工具完成任务 | 只能完成一轮文本回复 |
 | 架构边界 | Loop 会协调工具、权限、上下文、恢复 | Loop 只协调 provider 和 history |
@@ -95,7 +95,7 @@ user input
 
 这不是说工具不重要。恰恰相反，工具太重要，所以不能在 Agent Loop 里随手硬编码。当前实现先把“事件流”和“消息历史”做好，后面 Tool System、Permission、File Tools、Bash 都会沿着这条流接进来。
 
-接近 生产级系统 的路线会是：
+接近 ccb 的路线会是：
 
 ```text
 text-only loop

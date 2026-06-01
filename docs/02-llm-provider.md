@@ -1,4 +1,4 @@
-﻿# LLM Provider 教学文档
+# LLM Provider 教学文档
 
 ## 这个模块解决什么问题
 
@@ -63,7 +63,7 @@ interface LanguageModelProvider {
 
 ## 教学版取舍
 
-生产级系统 的模型层更像生产系统里的“模型网关”：它不仅要把消息发给模型，还要处理 provider 路由、模型配置、复杂消息块、工具调用相关转换、usage/cost、错误恢复，以及和主循环的协作。
+ccb 的模型层更像生产系统里的“模型网关”：它不仅要把消息发给模型，还要处理 provider 路由、模型配置、复杂消息块、工具调用相关转换、usage/cost、错误恢复，以及和主循环的协作。
 
 mini-ccode 当前的 LLM Provider 只做一条窄边界：
 
@@ -75,7 +75,7 @@ ModelMessage[]
 
 核心差异如下：
 
-| 维度 | 完整产品级做法 | mini-ccode 当前实现 |
+| 维度 | ccb 做法 | mini-ccode 当前实现 |
 |---|---|---|
 | Provider 组织 | 独立包和更完整的依赖注入边界 | 单包内的 `src/llm/` |
 | 厂商支持 | 为多模型、多 provider 演进留了更复杂的位置 | 先用一个 OpenAI-compatible HTTP/SSE provider 覆盖真实调用 |

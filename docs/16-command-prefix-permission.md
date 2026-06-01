@@ -1,4 +1,4 @@
-﻿# 命令前缀审批教学文档
+# 命令前缀审批教学文档
 
 ## 1. 这个模块改变了什么
 
@@ -50,7 +50,7 @@ command startsWith(prefix + whitespace)
 
 ## 5. 教学版取舍
 
-| 层次 | 完整产品级做法 | mini-ccode 当前实现 |
+| 层次 | ccb 做法 | mini-ccode 当前实现 |
 |---|---|---|
 | 规则种类 | exact / prefix / wildcard，多来源规则 | 仅当前进程内 prefix |
 | PowerShell 分析 | 解析命令、别名、管道、只读判断 | 不做语法分析 |

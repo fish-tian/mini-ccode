@@ -1,4 +1,4 @@
-﻿# File Tools 教学文档
+# File Tools 教学文档
 
 ## 这个模块解决什么问题
 
@@ -138,7 +138,7 @@ bun run mini-ccode -- --permission-mode allow-all "修改指定文件"
 
 ## 教学版取舍
 
-| 维度 | 完整产品级做法 | mini-ccode 当前阶段 |
+| 维度 | ccb 做法 | mini-ccode 当前阶段 |
 |---|---|---|
 | Read | 支持更多文件类型、词元限制、读取状态 | 只读 UTF-8 文本，返回行号 |
 | Write | 有读前写、修改时间保护、历史记录 | 直接完整写入工作区内文件 |

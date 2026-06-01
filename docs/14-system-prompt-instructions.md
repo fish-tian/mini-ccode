@@ -1,4 +1,4 @@
-﻿# System Prompt / Instructions 教学文档
+# System Prompt / Instructions 教学文档
 
 ## 1. 它解决什么问题
 
@@ -12,11 +12,11 @@
 | 项目规则上下文 | 当前工作区的 项目规则文件 | 否 |
 | 普通对话历史 | 用户输入、模型回复、工具结果 | 是 |
 
-这个分层接近 生产级系统 的做法：默认 system prompt 负责通用行为，`CLAUDE.md` 等项目规则通过用户上下文进入模型请求。mini-ccode 首版使用 项目规则文件，因为这个项目的真实开发规则就在这里。
+这个分层接近 ccb 的做法：默认 system prompt 负责通用行为，`CLAUDE.md` 等项目规则通过用户上下文进入模型请求。mini-ccode 首版使用 项目规则文件，因为这个项目的真实开发规则就在这里。
 
 ## 2. 默认提示词
 
-默认提示词在 `src/instructions/default-prompt.ts` 生成，结构学习 生产级系统 的段落组织，但只描述当前已经实现的能力：
+默认提示词在 `src/instructions/default-prompt.ts` 生成，结构学习 ccb 的段落组织，但只描述当前已经实现的能力：
 
 ```text
 # Identity
@@ -57,7 +57,7 @@ bun run mini-ccode --system-prompt "Custom agent." "review"
 bun run mini-ccode --append-system-prompt "Only report findings." "review"
 ```
 
-`--system-prompt` 替换默认系统提示词。这和 生产级系统 的 custom system prompt 语义一致：替换的是默认通用行为规则，不是删除所有上下文。
+`--system-prompt` 替换默认系统提示词。这和 ccb 的 custom system prompt 语义一致：替换的是默认通用行为规则，不是删除所有上下文。
 
 `--append-system-prompt` 追加到当前系统提示词末尾。普通用户通常更适合用追加，因为它保留 mini-ccode 默认行为，只补充本次启动的临时要求。
 
@@ -86,9 +86,9 @@ current user input
 
 ## 6. 教学版取舍
 
-| 维度 | 完整产品级做法 | mini-ccode 当前 |
+| 维度 | ccb 做法 | mini-ccode 当前 |
 |---|---|---|
-| 默认提示词 | 多段动态数组，带提示词缓存边界 | 一个可读字符串，段落结构接近 生产级系统 |
+| 默认提示词 | 多段动态数组，带提示词缓存边界 | 一个可读字符串，段落结构接近 ccb |
 | 项目规则 | 多级 `CLAUDE.md`、rules、include | 工作区根 项目规则文件 |
 | 用户入口 | 替换、追加、文件参数、stdin | 替换和追加文本参数 |
 | 缓存 | provider 级 prompt cache | 不实现 |

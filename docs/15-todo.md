@@ -1,4 +1,4 @@
-﻿# Todo 任务清单教学文档
+# Todo 任务清单教学文档
 
 ## 1. 它解决什么问题
 
@@ -39,7 +39,7 @@ type TodoItem = {
 
 `TodoWrite` 只修改当前进程内的会话状态，不写项目文件，不运行本地命令，也不影响外部系统。因此它标记为只读工具，并且在默认、只读、全部允许三种权限模式下都可以执行。
 
-这和 生产级系统 的轻量 Todo 一致：Todo 是进度状态，不是危险操作。
+这和 ccb 的轻量 Todo 一致：Todo 是进度状态，不是危险操作。
 
 ## 5. CLI 如何显示
 
@@ -89,7 +89,7 @@ CLI 会显示：
 
 ## 7. 教学版取舍
 
-| 层 | 完整产品级做法 | mini-ccode 当前 |
+| 层 | ccb 做法 | mini-ccode 当前 |
 |---|---|---|
 | 工具 | `TodoWrite` | `TodoWrite` |
 | 状态 | `AppState.todos[agentId]` | 当前 Agent 的单会话 `TodoState` |

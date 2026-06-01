@@ -1,4 +1,4 @@
-﻿# CLI / REPL 教学文档
+# CLI / REPL 教学文档
 
 ## 这个模块解决什么问题
 
@@ -116,7 +116,7 @@ bun run mini-ccode -- "hello"
 
 ## 教学版取舍
 
-生产级系统 的 CLI / REPL 是完整产品外壳。它包含 Commander 参数系统、React/Ink TUI、`PromptInput`、slash command、输入队列、print mode、stream-json、SDK stdio、权限提示、远程会话和恢复逻辑。
+ccb 的 CLI / REPL 是完整产品外壳。它包含 Commander 参数系统、React/Ink TUI、`PromptInput`、slash command、输入队列、print mode、stream-json、SDK stdio、权限提示、远程会话和恢复逻辑。
 
 mini-ccode 当前只做最小外壳：
 
@@ -129,15 +129,15 @@ read line
 
 差异可以这样看：
 
-| 层级 | 完整产品级做法 | mini-ccode 当前实现 |
+| 层级 | ccb 做法 | mini-ccode 当前实现 |
 |---|---|---|
 | 表面行为 | 完整交互式 TUI，支持大量命令和模式 | 普通文本 REPL，只支持最小命令 |
 | 架构边界 | REPL 协调 QueryEngine、commands、hooks、permissions、session | CLI 只协调 Agent 和终端输入输出 |
 | 内部机制 | 输入可排队、可远程、可结构化、可恢复 | 输入一行处理一行 |
 | 输出 | UI 组件、text/json/stream-json、SDK 消息 | stdout/stderr 文本 |
-| 后续演进 | 已经是完整生产系统 | 后续模块逐步接近 生产级系统 |
+| 后续演进 | 已经是完整生产系统 | 后续模块逐步接近 ccb |
 
-这不是省略细节，而是把 生产级系统 的复杂度拆开学。当前先保证一个原则：CLI 不绕过 Agent Loop。之后每加一个模块，都沿着这条边界接入。
+这不是省略细节，而是把 ccb 的复杂度拆开学。当前先保证一个原则：CLI 不绕过 Agent Loop。之后每加一个模块，都沿着这条边界接入。
 
 ## 关键代码导读
 

@@ -1,4 +1,4 @@
-﻿# Provider Tool Calls 教学文档
+# Provider Tool Calls 教学文档
 
 ## 这个模块解决什么问题
 
@@ -105,7 +105,7 @@ CLI 已有工具事件渲染能力
 
 ## 教学版取舍
 
-| 维度 | 完整产品级做法 | mini-ccode 当前阶段 |
+| 维度 | ccb 做法 | mini-ccode 当前阶段 |
 |---|---|---|
 | 工具消息格式 | Anthropic 风格 `tool_use` / `tool_result` block 为主，并有复杂归一化 | OpenAI-compatible `tool_calls` / `tool` role |
 | 工具执行时机 | 支持更复杂的流式工具执行器 | 等 provider response 结束后执行 |
