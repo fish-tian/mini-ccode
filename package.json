@@ -1,0 +1,22 @@
+{
+  "name": "mini-ccode",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:real:llm": "vitest run --config vitest.real.config.ts",
+    "mini-ccode": "bun run bin/mini-ccode.ts",
+    "smoke:llm": "bun run scripts/llm-smoke.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^22.15.18",
+    "eslint": "^9.27.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.1.4"
+  }
+}
