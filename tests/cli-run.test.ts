@@ -37,6 +37,34 @@ class RecordingProvider implements LanguageModelProvider {
   }
 }
 
+class ThrowingOnceProvider implements LanguageModelProvider {
+  #thrown = false;
+
+  complete(): never {
+    throw new Error("complete is not used by the CLI");
+  }
+
+  async *stream(): AsyncIterable<ModelStreamEvent> {
+    await Promise.resolve();
+
+    if (!this.#thrown) {
+      this.#thrown = true;
+      throw new Error("stream crashed");
+    }
+
+    yield { type: "response_start" };
+    yield { type: "text_delta", text: "recovered" };
+    yield {
+      type: "response_stop",
+      response: {
+        content: "recovered",
+        stopReason: "end_turn",
+        usage: { inputTokens: 0, outputTokens: 0 }
+      }
+    };
+  }
+}
+
 function createWritable(): PassThrough & { output: string } {
   const stream = new PassThrough() as PassThrough & { output: string };
   stream.output = "";
@@ -182,6 +210,21 @@ describe("runCli", () => {
     expect(stdout.output).toContain("second");
     expect(stdout.output).toContain("bye");
     expect(stderr.output).toBe("");
+  });
+
+  it("keeps the REPL alive after an unexpected agent error", async () => {
+    const { options, stdout, stderr } = cliOptions(
+      [],
+      new ThrowingOnceProvider(),
+      ["first", "second", "exit"]
+    );
+
+    await expect(runCli(options)).resolves.toBe(0);
+
+    expect(stderr.output).toContain("Error: stream crashed");
+    expect(stdout.output).toContain("mini-ccode");
+    expect(stdout.output).toContain("recovered");
+    expect(stdout.output).toContain("bye");
   });
 
   it("compacts resumed context through the REPL command", async () => {

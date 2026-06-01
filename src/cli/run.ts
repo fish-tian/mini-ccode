@@ -249,7 +249,13 @@ async function runRepl(
       continue;
     }
 
-    const exitCode = await runPrompt(agent, input.text, output, false);
+    let exitCode;
+    try {
+      exitCode = await runPrompt(agent, input.text, output, false);
+    } catch (error) {
+      output.writeStderr(`Error: ${errorMessage(error)}\n`);
+      continue;
+    }
     if (exitCode !== 0) {
       continue;
     }
