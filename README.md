@@ -1,10 +1,21 @@
 # Mini CCode
 
-Mini CCode is a teaching-oriented TypeScript project that demonstrates how to build a small coding agent step by step.
+Mini CCode 是一个教学向的 TypeScript 项目，用来一步步拆解一个 Claude Code 风格的编程 Agent 是怎么工作的。
 
-It covers model interaction, the agent loop, tool execution, permissions, file operations, shell commands, session resume, context management, todo tracking, and sub-agent workflows.
+它不是生产级 Claude Code 替代品，而是一个可阅读、可测试、可逐章学习的小型实现。项目会按模块解释模型调用、Agent 循环、工具系统、权限控制、文件操作、命令执行、会话恢复、上下文管理、Todo 和 Sub-Agent 等能力。
 
-## Run
+## 当前能力
+
+- CLI 和交互式 REPL 入口
+- OpenAI-compatible 模型供应商接口和可确定测试的 Mock Provider
+- 基于事件流的 Agent Loop
+- 带类型定义的 Tool System
+- `read-only`、默认询问、`allow-all` 权限模式
+- 文件工具和本地命令工具
+- 会话保存与 `--resume` 恢复
+- 上下文管理、Todo 跟踪和 Sub-Agent 示例流程
+
+## 快速开始
 
 ```text
 bun install
@@ -13,7 +24,7 @@ bun run mini-ccode -- "run the tests"
 bun run mini-ccode
 ```
 
-Useful modes:
+常用模式：
 
 ```text
 bun run mini-ccode -- --permission-mode read-only "review without changes"
@@ -21,27 +32,33 @@ bun run mini-ccode -- --permission-mode allow-all "run the tests without prompts
 bun run mini-ccode -- --resume <session-id> "continue the saved work"
 ```
 
-## Documentation
+## 教程文档
 
-The public teaching chapters are in `docs/`. Start from `docs/README.md` for the full reading order.
+公开教学章节在 [docs/](./docs/) 目录中。完整阅读顺序见 [docs/README.md](./docs/README.md)。
 
-## Examples
+建议先读：
 
-- `examples/minivote`: a small full-stack voting app generated as a mini-ccode practice task.
+- [第 01 章：项目骨架](./docs/01-project-skeleton.md)
+- [第 02 章：模型供应商层](./docs/02-llm-provider.md)
+- [第 03 章：Agent 循环](./docs/03-agent-loop.md)
+- [第 05 章：工具系统](./docs/05-tool-system.md)
+- [第 06 章：权限系统](./docs/06-permission.md)
+- [第 08 章：文件工具](./docs/08-file-tools.md)
+- [第 13 章：上下文整理](./docs/13-context.md)
+- [第 17 章：Sub-Agent](./docs/17-sub-agent.md)
 
-Start with:
+## 示例
 
-- `docs/01-project-skeleton.md`
-- `docs/03-agent-loop.md`
-- `docs/05-tool-system.md`
-- `docs/06-permission.md`
-- `docs/13-context.md`
-- `docs/17-sub-agent.md`
+- [examples/minivote](./examples/minivote)：一个用 mini-ccode 练习生成的小型全栈投票应用。
 
-## Scripts
+## 开发命令
 
 ```text
 bun run typecheck
 bun run lint
 bun run test
 ```
+
+## 开发流程
+
+这个项目按模块推进。每个模块都要先研究参考实现，再写研究文档和设计文档，经过人工 review 后才进入实现、测试、教学文档和进度更新。
